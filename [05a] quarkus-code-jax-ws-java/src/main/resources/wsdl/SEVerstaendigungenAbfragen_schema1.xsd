@@ -1,0 +1,175 @@
+<xs:schema xmlns:tns="http://www.sozialversicherung.at/schema/zpv/ibs/VerstaendigungenAbfragen_3_0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" targetNamespace="http://www.sozialversicherung.at/schema/zpv/ibs/VerstaendigungenAbfragen_3_0" version="1.0">
+
+  <xs:element name="verstaendigungenAbfragen" type="tns:verstaendigungenAbfragen"/>
+
+  <xs:element name="verstaendigungenAbfragenResponse" type="tns:verstaendigungenAbfragenResponse"/>
+
+  <xs:complexType name="verstaendigungenAbfragen">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dtoVerstaendigungenABI" type="tns:dtoVerstaendigungenABI"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoVerstaendigungenABI">
+    <xs:complexContent>
+      <xs:extension base="tns:dtoInput">
+        <xs:sequence>
+          <xs:element name="letzteBekannteVerstaendigungsnummer" type="xs:integer"/>
+          <xs:element name="dtoVerstaendigungsEmpfaenger" type="tns:dtoVerstaendigungsEmpfaenger"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="dtoInput">
+    <xs:sequence>
+      <xs:element name="dtoRequestHeader" type="tns:dtoRequestHeader"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoVerstaendigungsEmpfaenger">
+    <xs:sequence>
+      <xs:element name="meldendeStelleCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="svtNutzsystemKurz" type="xs:string"/>
+      <xs:element name="verstaendPeriodenartKurz" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoRequestHeader">
+    <xs:sequence>
+      <xs:element name="dtoQuellsystem" type="tns:dtoQuellsystem"/>
+      <xs:element name="dtoKontextRQ" type="tns:dtoKontextRQ"/>
+      <xs:element name="dtoZielsystem" type="tns:dtoZielsystem"/>
+      <xs:element name="nachrichtId" type="xs:string"/>
+      <xs:element name="zeichenmenge" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoQuellsystem">
+    <xs:sequence>
+      <xs:element name="quellSystemApplikationsId" type="xs:string"/>
+      <xs:element name="quellSystemSystemId" type="xs:string"/>
+      <xs:element minOccurs="0" name="quellSystemPort" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoKontextRQ">
+    <xs:sequence>
+      <xs:element name="dtoBearbeiter" type="tns:dtoBearbeiter"/>
+      <xs:element name="transaktionsID" type="xs:string"/>
+      <xs:element name="verarbeitungsModus" type="xs:string"/>
+      <xs:element name="primaerSystemId" type="xs:string"/>
+      <xs:element minOccurs="0" name="vorgaengerNachrichtId" type="xs:string"/>
+      <xs:element name="ebenenSequenzNummer" type="xs:integer"/>
+      <xs:element minOccurs="0" name="bearbeitungsGrund" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoBearbeiter">
+    <xs:sequence>
+      <xs:element name="berechtigungsSystemId" type="xs:string"/>
+      <xs:element name="bearbeiterId" type="xs:string"/>
+      <xs:element name="meldendeStelle" type="xs:string"/>
+      <xs:element minOccurs="0" name="orgeinheitid" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoZielsystem">
+    <xs:sequence>
+      <xs:element name="zielSystemModus" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="verstaendigungenAbfragenResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:dtoVerstaendigungenABO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoVerstaendigungenABO">
+    <xs:complexContent>
+      <xs:extension base="tns:dtoOutput">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="anzahlDerVerbleibendenVerstaendigungen" type="xs:integer"/>
+          <xs:element minOccurs="0" name="dtoVerstaendigungsEmpfaenger" type="tns:dtoVerstaendigungsEmpfaenger"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="dtoVerstaendigungListe" nillable="true" type="tns:dtoVerstaendigung"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="dtoOutput">
+    <xs:sequence>
+      <xs:element name="fehlerpaket" type="tns:returnInfo"/>
+      <xs:element name="dtoResponseHeader" type="tns:dtoResponseHeader"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoVerstaendigung">
+    <xs:sequence>
+      <xs:element name="dtoBearbeiterinformation" type="tns:dtoBearbeiterinformation"/>
+      <xs:element name="parParrolleID_Partner" type="xs:integer"/>
+      <xs:element minOccurs="0" name="parParrolleID_Partnerrolle" type="xs:integer"/>
+      <xs:element name="verstaendigungsnr" type="xs:integer"/>
+      <xs:element name="vormerkobjektartKurz" type="xs:string"/>
+      <xs:element name="durchfuehrungTs" type="xs:dateTime"/>
+      <xs:element name="verstaendigungCDATA" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoBearbeiterinformation">
+    <xs:sequence>
+      <xs:element name="erstellerMstCode" type="xs:string"/>
+      <xs:element name="ersteller" type="xs:string"/>
+      <xs:element name="erstellTS" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="erstellBerechtigungsSystemId" type="xs:string"/>
+      <xs:element name="letztAendMstCode" type="xs:string"/>
+      <xs:element name="letztAend" type="xs:string"/>
+      <xs:element name="letztAendTS" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="letztAendBerechtigungsSystemId" type="xs:string"/>
+      <xs:element minOccurs="0" name="bearbeitungsgrund" type="xs:string"/>
+      <xs:element minOccurs="0" name="zpvTransaktionsID" type="xs:string"/>
+      <xs:element minOccurs="0" name="funktionKurz" type="xs:string"/>
+      <xs:element minOccurs="0" name="aktion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="returnInfo">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="meldungen" type="tns:meldung"/>
+      <xs:element name="istOk" type="xs:string"/>
+      <xs:element name="returnCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="meldung">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="kategorie" type="xs:string"/>
+      <xs:element name="text" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:parameter"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="parameter">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="wert" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoResponseHeader">
+    <xs:sequence>
+      <xs:element name="dtoKontextRS" type="tns:dtoKontextRS"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoKontextRS">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="transaktionsID" type="xs:string"/>
+      <xs:element minOccurs="0" name="relatedRequestId" type="xs:string"/>
+      <xs:element name="zpvTransaktionsID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ targetNamespace="http://www.itsv.at/eAUM/" xmlns="http://www.itsv.at/eAUM/">
+
+ <xsd:complexType name="AllgemeinePerson">
+  <xsd:annotation>
+   <xsd:documentation>Enthält die Daten, die für alle Patienten anzugeben sind;
+    gleichzeitig sind dies die Daten für Patienten, die
+    weder eine SV-Nummer noch eine EKVK haben.
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:sequence>
+   <xsd:element name="nachName" minOccurs="0">
+    <xsd:simpleType>
+     <xsd:restriction base="xsd:string">
+      <xsd:minLength value="0" />
+      <xsd:maxLength value="70" />
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+   <xsd:element name="vorName" minOccurs="0">
+    <xsd:simpleType>
+     <xsd:restriction base="xsd:string">
+      <xsd:minLength value="0" />
+      <xsd:maxLength value="70" />
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+   <!-- Muss optional sein wegen Abwärtskompatibilität -->
+   <xsd:element name="geburtsDat" type="xsd:date" minOccurs="0"/>
+  </xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:complexType name="SVPerson">
+  <xsd:annotation>
+   <xsd:documentation>Eine Person, die durch ihre SV-Nummer identifiziert wird.</xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexContent>
+   <xsd:extension base="AllgemeinePerson">
+    <xsd:sequence>
+     <xsd:element name="vsnr">
+      <xsd:annotation>
+       <xsd:documentation>Eine gültige Versicherungsnummer
+       </xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+       <xsd:restriction base="xsd:string">
+        <xsd:length value="10" />
+        <xsd:whiteSpace value="collapse" />
+       </xsd:restriction>
+      </xsd:simpleType>
+     </xsd:element>
+     <xsd:element name="vsArt">
+      <xsd:simpleType>
+       <xsd:restriction base="xsd:string">
+        <xsd:length value="1" />
+       </xsd:restriction>
+      </xsd:simpleType>
+     </xsd:element>
+     <xsd:element name="ohneAnspruch" type="xsd:boolean" />
+    </xsd:sequence>
+   </xsd:extension>
+  </xsd:complexContent>
+ </xsd:complexType>
+
+ <xsd:complexType name="EKVKPerson">
+  <xsd:annotation>
+   <xsd:documentation>Eine Person, die über ihre EKVK-Nummer identifiziert wird.</xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexContent>
+   <xsd:extension base="AllgemeinePerson">
+    <xsd:sequence>
+     <xsd:element name="ekvk">
+      <xsd:annotation>
+       <xsd:documentation>Die 20-stellige EKVK-Nummer.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+       <xsd:restriction base="xsd:string">
+        <xsd:length value="20" />
+       </xsd:restriction>
+      </xsd:simpleType>
+     </xsd:element>
+     <xsd:element name="ausltr" minOccurs="0">
+      <xsd:annotation>
+       <xsd:documentation>Der ausländische SV-Träger.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+       <xsd:restriction base="xsd:string">
+        <xsd:minLength value="0" />
+        <xsd:maxLength value="70" />
+       </xsd:restriction>
+      </xsd:simpleType>
+     </xsd:element>
+    </xsd:sequence>
+   </xsd:extension>
+  </xsd:complexContent>
+ </xsd:complexType>
+
+ <xsd:complexType name="Adresse">
+  <xsd:annotation>
+   <xsd:documentation>Krankenstandsadresse.</xsd:documentation>
+  </xsd:annotation>
+  <xsd:sequence>
+   <xsd:element name="austra">
+    <xsd:simpleType>
+     <xsd:restriction base="xsd:string">
+      <xsd:minLength value="0" />
+      <xsd:maxLength value="50" />
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+   <xsd:element name="auPlzl">
+    <xsd:simpleType>
+     <xsd:restriction base="xsd:string">
+      <xsd:minLength value="0" />
+      <xsd:maxLength value="9" />
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+   <xsd:element name="auOrt">
+    <xsd:simpleType>
+     <xsd:restriction base="xsd:string">
+      <xsd:minLength value="0" />
+      <xsd:maxLength value="40" />
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+   <!-- Muss optional sein wegen Abwärtskompatibilität -->
+   <xsd:element name="auLand" minOccurs="0">
+    <xsd:simpleType>
+     <xsd:restriction base="xsd:string">
+      <xsd:length value="3" />
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+  </xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:complexType name="Diagnose">
+  <xsd:annotation>
+   <xsd:documentation>Diagnose - entweder als Freitext oder als Kombination von Diagnosecode
+    und verwendetem Codierungssystem
+    (Revision) anzugeben.
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:choice>
+   <xsd:element name="diagnoseCode">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="code">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="0" />
+         <xsd:maxLength value="7" />
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+      <xsd:element name="revision">
+       <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+         <xsd:minLength value="0" />
+         <xsd:maxLength value="2" />
+        </xsd:restriction>
+       </xsd:simpleType>
+      </xsd:element>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="diagnoseText">
+    <xsd:simpleType>
+     <xsd:restriction base="xsd:string">
+      <xsd:minLength value="0" />
+      <xsd:maxLength value="250" />
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:element>
+  </xsd:choice>
+ </xsd:complexType>
+
+ <xsd:complexType name="Anstaltsaufenthalt">
+  <xsd:sequence>
+   <xsd:element name="anstaltVonDat" type="xsd:date" />
+   <xsd:element name="anstaltBisDat" type="xsd:date" />
+  </xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:complexType name="Ausgangszeit">
+  <xsd:annotation>
+   <xsd:documentation>Von den Vorgaben des KVT abweichende Ausgangszeit.</xsd:documentation>
+  </xsd:annotation>
+  <xsd:sequence>
+   <xsd:element name="ausgangVonZeit" type="xsd:time" />
+   <xsd:element name="ausgangBisZeit" type="xsd:time" />
+  </xsd:sequence>
+ </xsd:complexType>
+
+ <xsd:simpleType name="MeldungsArt">
+  <xsd:annotation>
+   <xsd:documentation>Meldungsart des Datensatzes, Format XXNN XX :
+    zweistelliger alphabetischer Begriff (AU bzw. AF) NN :
+    zweistelliger nummerischer Begriff (01-Meldung,
+    02-Storno)
+   </xsd:documentation>
+  </xsd:annotation>
+  <xsd:restriction base="xsd:string">
+   <xsd:length value="4" />
+   <xsd:enumeration value="AU01" />
+   <xsd:enumeration value="AU02" />
+   <xsd:enumeration value="AF01" />
+   <xsd:enumeration value="AF02" />
+  </xsd:restriction>
+ </xsd:simpleType>
+
+
+ <xsd:element name="MeldungsInhalt">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element name="meldungsId" minOccurs="1" maxOccurs="1">
+     <xsd:annotation>
+      <xsd:documentation>Für jede Meldung unique, d.h. die Meldung ist eindeutig identifizierbar.</xsd:documentation>
+     </xsd:annotation>
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="20" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="meldungsArt" type="MeldungsArt" />
+    <xsd:element name="vpnr" minOccurs="1" maxOccurs="1">
+     <xsd:annotation>
+      <xsd:documentation>Vertragspartnernummer des krankschreibenden (bzw.
+       gesundschreibenden) Arztes, 10stellig laut LGKK Siehe
+       auch
+       ORG-Beschreibung "DVP – Datenaustausch mit
+       Vertragspartnern": Kapitel D. 113 Datenfeld "VPNR -
+       Vertragspartnernummer"
+      </xsd:documentation>
+     </xsd:annotation>
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="10" />
+       <xsd:whiteSpace value="collapse" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="vstrl" minOccurs="1" maxOccurs="1">
+     <xsd:annotation>
+      <xsd:documentation>Gültiger Versicherungsträgercode</xsd:documentation>
+     </xsd:annotation>
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:length value="2" />
+       <xsd:whiteSpace value="collapse" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="person" type="AllgemeinePerson" />
+    <xsd:element name="erstellungsDat" type="xsd:date" />
+    <xsd:element name="aubeginnDat" type="xsd:date" />
+    <xsd:element name="auendeDat" type="xsd:date" minOccurs="0" />
+    <xsd:element name="afmelderTyp" minOccurs="0" maxOccurs="1">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="3" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="anstaltAufenthalt" minOccurs="0" type="Anstaltsaufenthalt" />
+    <xsd:element name="diagnose" type="Diagnose" />
+    <xsd:element name="erkrankungTyp" minOccurs="0" maxOccurs="1">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="3" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="auEreignis" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="7" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="stromUnfall" type="xsd:boolean" minOccurs="0" />
+    <xsd:element name="infoAnm" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="250" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="ausgangZeit1" type="Ausgangszeit" minOccurs="0" />
+    <xsd:element name="ausgangZeit2" type="Ausgangszeit" minOccurs="0" />
+    <xsd:element name="bettruhe" type="xsd:boolean" minOccurs="0" />
+    <xsd:element name="gehunfaehigBisDat" type="xsd:date" minOccurs="0" />
+    <xsd:element name="gipsBisDat" type="xsd:date" minOccurs="0" />
+    <xsd:element name="wiederbestellDat" type="xsd:date" minOccurs="0" />
+    <xsd:element name="voraussauendeDat" type="xsd:date" minOccurs="0" />
+    <xsd:element name="auAdresse" type="Adresse" minOccurs="0" />
+    <xsd:element name="rueckDatGrund" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="2" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="berufsUnfaehig" type="xsd:boolean" minOccurs="0" />
+    <xsd:element name="behBeginnDat" type="xsd:date" />
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="MeldungResponse">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element name="statusCode" type="xsd:string" />
+    <xsd:element name="statusText" type="xsd:string" />
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="MeldungsInfo">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element name="ZielpartnerCode">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:length value="2" />
+       <xsd:whiteSpace value="collapse" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="UrsprungspartnerCode">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:length value="2" />
+       <xsd:whiteSpace value="collapse" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="ProjektKennzeichen">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:length value="2" />
+       <xsd:whiteSpace value="collapse" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="ListKennzeichen">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:length value="2" />
+       <xsd:whiteSpace value="collapse" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="Erstellungsdatum" type="xsd:date" minOccurs="0" />
+    <xsd:element name="AenderungsdienstNummer" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="4" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="EingabeBestandsNummer" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="2" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="EingabeArt" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="2" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="TestKennzeichen" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="1" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="ZusaetzlOrdnungsbegriff" minOccurs="1">
+     <xsd:annotation>
+      <xsd:documentation>Für jede Meldung unique, d.h. jeder Datensatz ist mit
+       dem zus. Ordnungsbegriff eindeutig identifizierbar.
+      </xsd:documentation>
+     </xsd:annotation>
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="20" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="ReferenzNummer" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="10" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="BestandInhalt" minOccurs="0">
+     <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+       <xsd:minLength value="0" />
+       <xsd:maxLength value="10" />
+      </xsd:restriction>
+     </xsd:simpleType>
+    </xsd:element>
+    <xsd:element name="BestandSigniert" type="xsd:boolean" minOccurs="0" />
+    <xsd:element name="BestandVerschluesselt" type="xsd:boolean" minOccurs="0" />
+    <xsd:element name="BestandKomprimiert" type="xsd:boolean" minOccurs="0" />
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="MeldungRequest">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref="MeldungsInhalt" />
+    <xsd:element ref="MeldungsInfo" />
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+</xsd:schema>

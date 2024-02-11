@@ -1,0 +1,296 @@
+<xs:schema xmlns:tns="http://www.sozialversicherung.at/schema/zpv/ibs/BpkLesen_5_0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" targetNamespace="http://www.sozialversicherung.at/schema/zpv/ibs/BpkLesen_5_0" version="1.0">
+
+  <xs:element name="bPkLesen" type="tns:bPkLesenType"/>
+
+  <xs:element name="bPkLesenResponse" type="tns:bPkLesenResponse"/>
+
+  <xs:complexType name="bPkLesenType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="dtobPKListeLEI" type="tns:dtObPKListeLEI"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtObPKListeLEI">
+    <xs:complexContent>
+      <xs:extension base="tns:dtoInput">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="dtobPKLEIListe" nillable="true" type="tns:dtObPKLEI"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="dtoInput">
+    <xs:sequence>
+      <xs:element name="dtoRequestHeader" type="tns:dtoRequestHeader"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtObPKLEI">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="bpkBereichKurz" type="xs:string"/>
+      <xs:element minOccurs="0" name="svbPKVerschluesseltJN" type="xs:string"/>
+      <xs:element name="bkStatusKZ" type="tns:bkStatusKZVO"/>
+      <xs:element name="partnerDiakritischJN" type="xs:string"/>
+      <xs:element name="bearbeiterinfoJN" type="xs:string"/>
+      <xs:element minOccurs="0" name="partnerrollenartKurzAnforderung" type="xs:string"/>
+      <xs:element name="dtoPartnerParrolleIdentifikation" type="tns:dtoPartnerParrolleIdentifikation"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bkStatusKZVO">
+    <xs:sequence>
+      <xs:element name="statusKZ" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoPartnerParrolleIdentifikation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="parParrolleID" type="xs:integer"/>
+      <xs:element minOccurs="0" name="bkFachschluesselAngabe" type="tns:bkFachschluesselAngabeVO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bkFachschluesselAngabeVO">
+    <xs:sequence>
+      <xs:element name="fachschluesselartKurz" type="xs:string"/>
+      <xs:element name="fachschluessel" type="xs:string"/>
+      <xs:element minOccurs="0" name="fachschluesselGueltigDat" type="xs:date"/>
+      <xs:element minOccurs="0" name="stornierterFsJN" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoRequestHeader">
+    <xs:sequence>
+      <xs:element name="dtoQuellsystem" type="tns:dtoQuellsystem"/>
+      <xs:element name="dtoKontextRQ" type="tns:dtoKontextRQ"/>
+      <xs:element name="dtoZielsystem" type="tns:dtoZielsystem"/>
+      <xs:element name="nachrichtId" type="xs:string"/>
+      <xs:element name="zeichenmenge" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoQuellsystem">
+    <xs:sequence>
+      <xs:element name="quellSystemApplikationsId" type="xs:string"/>
+      <xs:element name="quellSystemSystemId" type="xs:string"/>
+      <xs:element minOccurs="0" name="quellSystemPort" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoKontextRQ">
+    <xs:sequence>
+      <xs:element name="dtoBearbeiter" type="tns:dtoBearbeiter"/>
+      <xs:element name="transaktionsID" type="xs:string"/>
+      <xs:element name="verarbeitungsModus" type="xs:string"/>
+      <xs:element name="primaerSystemId" type="xs:string"/>
+      <xs:element minOccurs="0" name="vorgaengerNachrichtId" type="xs:string"/>
+      <xs:element name="ebenenSequenzNummer" type="xs:integer"/>
+      <xs:element minOccurs="0" name="bearbeitungsGrund" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoBearbeiter">
+    <xs:sequence>
+      <xs:element name="berechtigungsSystemId" type="xs:string"/>
+      <xs:element name="bearbeiterId" type="xs:string"/>
+      <xs:element name="meldendeStelle" type="xs:string"/>
+      <xs:element minOccurs="0" name="orgeinheitid" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoZielsystem">
+    <xs:sequence>
+      <xs:element name="zielSystemModus" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bPkLesenResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:dtObPKListeLEO"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtObPKListeLEO">
+    <xs:complexContent>
+      <xs:extension base="tns:dtoOutput">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="dtobPKLEOListe" nillable="true" type="tns:dtObPKLEO"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="dtoOutput">
+    <xs:sequence>
+      <xs:element name="fehlerpaket" type="tns:returnInfo"/>
+      <xs:element name="dtoResponseHeader" type="tns:dtoResponseHeader"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtObPKLEO">
+    <xs:sequence>
+      <xs:element name="dtoPartnerKurz" type="tns:dtoPartnerKurz"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="dtobPKListe" nillable="true" type="tns:dtObPK"/>
+      <xs:element name="zusatzFehlerpaket" type="tns:returnInfo"/>
+      <xs:element minOccurs="0" name="dtoPartnerrolleKurz" type="tns:dtoPartnerrolleKurz"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoPartnerKurz">
+    <xs:sequence>
+      <xs:element name="parParrolleID_Partner" type="xs:integer"/>
+      <xs:element minOccurs="0" name="partnerartKurz" type="xs:string"/>
+      <xs:element minOccurs="0" name="svbPKAktuellJN" type="xs:string"/>
+      <xs:element minOccurs="0" name="stornoJN" type="xs:string"/>
+      <xs:element minOccurs="0" name="auskunftssperreVorhandenJN" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoPersonKurz">
+    <xs:complexContent>
+      <xs:extension base="tns:dtoPartnerKurz">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="titelVorneKurz" type="xs:string"/>
+          <xs:element minOccurs="0" name="titelVorne" type="xs:string"/>
+          <xs:element name="vorname" type="xs:string"/>
+          <xs:element name="familienname" type="xs:string"/>
+          <xs:element minOccurs="0" name="namensergaenzungKZ" type="xs:string"/>
+          <xs:element minOccurs="0" name="namensergaenzung" type="xs:string"/>
+          <xs:element minOccurs="0" name="titelHintenKurz" type="xs:string"/>
+          <xs:element minOccurs="0" name="titelHinten" type="xs:string"/>
+          <xs:element name="personenartKurz" type="xs:string"/>
+          <xs:element name="personenart" type="xs:string"/>
+          <xs:element name="geschlechtKZ" type="xs:string"/>
+          <xs:element name="geschlecht" type="xs:string"/>
+          <xs:element minOccurs="0" name="bestaetigtesGeburtsDAT" type="xs:date"/>
+          <xs:element minOccurs="0" name="bkUnbestaetigtesGeburtsdatum" type="tns:bkUnbestaetigtesGeburtsdatumVO"/>
+          <xs:element minOccurs="0" name="bkAmtlichesGeburtsdatum" type="tns:bkAmtlichesGeburtsdatumVO"/>
+          <xs:element minOccurs="0" name="bestaetigtesTodesDAT" type="xs:date"/>
+          <xs:element minOccurs="0" name="unbestaetigtesTodesDAT" type="xs:date"/>
+          <xs:element minOccurs="0" name="dtoPersonDiakritisch" type="tns:dtoPersonDiakritisch"/>
+          <xs:element minOccurs="0" name="isoA3Staatsbuergerschaft" type="xs:string"/>
+          <xs:element minOccurs="0" name="familienstandKurz" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="bkUnbestaetigtesGeburtsdatumVO">
+    <xs:sequence>
+      <xs:element name="unvollstaendigesDatum" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bkAmtlichesGeburtsdatumVO">
+    <xs:sequence>
+      <xs:element name="unvollstaendigesDatum" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoPersonDiakritisch">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="titelVorneDiakritisch" type="xs:string"/>
+      <xs:element minOccurs="0" name="titelHintenDiakritisch" type="xs:string"/>
+      <xs:element name="vornameDiakritisch" type="xs:string"/>
+      <xs:element name="familiennameDiakritisch" type="xs:string"/>
+      <xs:element minOccurs="0" name="geburtsnameDiakritisch" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtObPK">
+    <xs:sequence>
+      <xs:element name="bpkID" type="xs:integer"/>
+      <xs:element minOccurs="0" name="bpk_unverschluesselt" type="xs:string"/>
+      <xs:element minOccurs="0" name="bpk_verschluesselt" type="xs:string"/>
+      <xs:element name="bpkBereichKurz" type="xs:string"/>
+      <xs:element name="bpkBereich" type="xs:string"/>
+      <xs:element name="bkGueltigkeitszeitraum" type="tns:bkGueltigkeitszeitraumVO"/>
+      <xs:element name="bkStornoinformation" type="tns:bkStornoinformationVO"/>
+      <xs:element name="updatecount" type="xs:integer"/>
+      <xs:element minOccurs="0" name="dtoBearbeiterinformation" type="tns:dtoBearbeiterinformation"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bkGueltigkeitszeitraumVO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="gueltigVonDAT" type="xs:date"/>
+      <xs:element minOccurs="0" name="gueltigBisDAT" type="xs:date"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="bkStornoinformationVO">
+    <xs:sequence>
+      <xs:element name="stornoJN" type="xs:string"/>
+      <xs:element minOccurs="0" name="stornogrund" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoBearbeiterinformation">
+    <xs:sequence>
+      <xs:element name="erstellerMstCode" type="xs:string"/>
+      <xs:element name="ersteller" type="xs:string"/>
+      <xs:element name="erstellTS" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="erstellBerechtigungsSystemId" type="xs:string"/>
+      <xs:element name="letztAendMstCode" type="xs:string"/>
+      <xs:element name="letztAend" type="xs:string"/>
+      <xs:element name="letztAendTS" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="letztAendBerechtigungsSystemId" type="xs:string"/>
+      <xs:element minOccurs="0" name="bearbeitungsgrund" type="xs:string"/>
+      <xs:element minOccurs="0" name="zpvTransaktionsID" type="xs:string"/>
+      <xs:element minOccurs="0" name="funktionKurz" type="xs:string"/>
+      <xs:element minOccurs="0" name="aktion" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="returnInfo">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="meldungen" type="tns:meldung"/>
+      <xs:element name="istOk" type="xs:string"/>
+      <xs:element name="returnCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="meldung">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="kategorie" type="xs:string"/>
+      <xs:element name="text" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter" type="tns:parameter"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="parameter">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="wert" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoPartnerrolleKurz">
+    <xs:sequence>
+      <xs:element name="parParrolleID_Partnerrolle" type="xs:integer"/>
+      <xs:element name="partnerrollenartKurz" type="xs:string"/>
+      <xs:element name="partnerrollenart" type="xs:string"/>
+      <xs:element name="fachschluesselartKurzbez" type="xs:string"/>
+      <xs:element name="fsPartnerrolle" type="xs:string"/>
+      <xs:element name="bkGueltigkeitszeitraum" type="tns:bkGueltigkeitszeitraumVO"/>
+      <xs:element name="stornoJN" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoResponseHeader">
+    <xs:sequence>
+      <xs:element name="dtoKontextRS" type="tns:dtoKontextRS"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="dtoKontextRS">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="transaktionsID" type="xs:string"/>
+      <xs:element minOccurs="0" name="relatedRequestId" type="xs:string"/>
+      <xs:element name="zpvTransaktionsID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
